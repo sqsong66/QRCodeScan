@@ -1,11 +1,11 @@
 package com.sqsong.qrcodescansample;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -68,21 +68,10 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeDecod
 
     @Override
     public void onDecodeSuccess(Result result) {
-        String text = result.getText();
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent();
-//        intent.putExtra("scan_result", text);
-//        setResult(RESULT_OK, intent);
-//        finish();
-//        mQRCodeManager.startScanning();
-        /*Toast.makeText(this, result.getText(), Toast.LENGTH_SHORT).show();
-
-        mQRCodeScanView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mQRCodeManager.startScanning();
-            }
-        }, 1000);*/
+        Intent intent = new Intent();
+        intent.putExtra("scan_result", result.getText());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
