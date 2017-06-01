@@ -1,2 +1,2 @@
-# QRCodeScan
-A Qr code scanning library based on ZXing.
+# QRCodeScan Library
+A qr code scanning library based on ZXing.
