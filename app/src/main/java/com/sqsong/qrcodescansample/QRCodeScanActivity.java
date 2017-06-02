@@ -1,11 +1,13 @@
 package com.sqsong.qrcodescansample;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -24,10 +26,18 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeDecod
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStatusBarTranslucent();
         setContentView(R.layout.activity_qrcode_scan);
 
         initView();
         initEvent();
+    }
+
+    protected void setStatusBarTranslucent() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
     }
 
     private void initView() {

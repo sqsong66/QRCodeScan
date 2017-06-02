@@ -5,6 +5,7 @@
     android:id="@+id/activity_qrcode_scan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.sqsong.qrcodescansample.QRCodeScanActivity">
 
     <SurfaceView
@@ -21,6 +22,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="25dp"
         android:background="@color/colorMusk"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:titleTextColor="@android:color/white">
