@@ -1,6 +1,7 @@
 package com.sqsong.qrcodelib.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -13,6 +14,7 @@ import android.view.View;
 import com.google.zxing.ResultPoint;
 import com.sqsong.qrcodelib.R;
 import com.sqsong.qrcodelib.camera.CameraManager;
+import com.sqsong.qrcodelib.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,6 @@ import java.util.List;
  */
 
 public class QRCodeScanView extends View {
-
-    private static final String TAG = QRCodeScanView.class.getSimpleName();
 
     private static final int POINT_SIZE = 6;
     private static final int MAX_RESULT_POINTS = 20;
@@ -35,19 +35,20 @@ public class QRCodeScanView extends View {
 
     private Path mPath;
     private Paint mPaint;
-    private int muskColor;
+    private int mMuskColor;
     private Rect mScanRect;
-    private int borderColor;
+    private int mBorderColor;
     private int mCornerHeight;
     private Paint mBorderPaint;
     private int mCenterLineTop;
+    private int mCenterLineColor;
+    private int mResultPointColor;
     private Rect mPreviewScanRect;
+    private int mCenterLineHeight;
     private CameraManager mCameraManager;
 
-    private int resultPointColor;
     private List<ResultPoint> possibleResultPoints;
     private List<ResultPoint> lastPossibleResultPoints;
-
 
     public QRCodeScanView(Context context) {
         this(context, null);
@@ -60,21 +61,28 @@ public class QRCodeScanView extends View {
     public QRCodeScanView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        initParams(context, attrs);
         init();
     }
 
-    private void init() {
-        muskColor = ContextCompat.getColor(getContext(), R.color.colorMusk);
-        borderColor = ContextCompat.getColor(getContext(), R.color.colorAccent);
-        resultPointColor = ContextCompat.getColor(getContext(), R.color.colorPossiblePoints);
+    private void initParams(Context context, AttributeSet attrs) {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.QRCodeScanView);
+        mMuskColor = ta.getColor(R.styleable.QRCodeScanView_muskColor, ContextCompat.getColor(getContext(), R.color.colorMusk));
+        mBorderColor = ta.getColor(R.styleable.QRCodeScanView_cornerBorderColor, ContextCompat.getColor(getContext(), R.color.colorAccent));
+        mCenterLineColor = ta.getColor(R.styleable.QRCodeScanView_centerLineColor, ContextCompat.getColor(getContext(), R.color.colorAccent));
+        mResultPointColor = ta.getColor(R.styleable.QRCodeScanView_resultPointColor, ContextCompat.getColor(getContext(), R.color.colorPossiblePoints));
+        mCornerHeight = (int) ta.getDimension(R.styleable.QRCodeScanView_borderHeight, 0);
+        mCenterLineHeight = (int) ta.getDimension(R.styleable.QRCodeScanView_centerLineHeight, DensityUtil.dip2px(1));
+        ta.recycle();
+    }
 
+    private void init() {
         possibleResultPoints = new ArrayList<>(5);
         lastPossibleResultPoints = null;
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBorderPaint.setStyle(Paint.Style.STROKE);
-        mBorderPaint.setColor(borderColor);
         mPath = new Path();
         mScanRect = new Rect();
     }
@@ -108,6 +116,10 @@ public class QRCodeScanView extends View {
         drawPossiblePoints(canvas);
     }
 
+    /**
+     * 绘制可能是二维码关键点的店
+     * @param canvas 画布
+     */
     private void drawPossiblePoints(Canvas canvas) {
         float scaleX = mScanRect.width() / (float) mPreviewScanRect.width();
         float scaleY = mScanRect.height() / (float) mPreviewScanRect.height();
@@ -123,7 +135,7 @@ public class QRCodeScanView extends View {
             possibleResultPoints = new ArrayList<>(5);
             lastPossibleResultPoints = currentPossible;
             mPaint.setAlpha(CURRENT_POINT_OPACITY);
-            mPaint.setColor(resultPointColor);
+            mPaint.setColor(mResultPointColor);
             synchronized (currentPossible) {
                 for (ResultPoint point : currentPossible) {
                     canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
@@ -133,7 +145,7 @@ public class QRCodeScanView extends View {
         }
         if (currentLast != null) {
             mPaint.setAlpha(CURRENT_POINT_OPACITY / 2);
-            mPaint.setColor(resultPointColor);
+            mPaint.setColor(mResultPointColor);
             synchronized (currentLast) {
                 float radius = POINT_SIZE / 2.0f;
                 for (ResultPoint point : currentLast) {
@@ -143,55 +155,73 @@ public class QRCodeScanView extends View {
             }
         }
 
+        // 定时绘制中间的扫描框部分
         postInvalidateDelayed(ANIMATION_DELAY, mScanRect.left, mScanRect.top,
                 mScanRect.right, mScanRect.bottom);
     }
 
+    /**
+     * 绘制中间的扫描线
+     * @param canvas 画布
+     */
     private void drawCenterLine(Canvas canvas) {
         mCenterLineTop += CENTER_LINE_MOVE_DISTANCE;
         if (mCenterLineTop > mScanRect.bottom - HALF_CORNER_BORDER_WIDTH) {
             mCenterLineTop = mScanRect.top + HALF_CORNER_BORDER_WIDTH;
         }
-        mPaint.setColor(borderColor);
+        mPaint.setColor(mCenterLineColor);
         canvas.drawRect(mScanRect.left + HALF_CORNER_BORDER_WIDTH, mCenterLineTop,
-                mScanRect.right - HALF_CORNER_BORDER_WIDTH, mCenterLineTop + 2,
+                mScanRect.right - HALF_CORNER_BORDER_WIDTH, mCenterLineTop + mCenterLineHeight,
                 mPaint);
     }
 
+    /**
+     * 绘制四个边角部分
+     * @param canvas 画布
+     */
     private void drawFourCorner(Canvas canvas) {
         mPath.reset();
 
-        mPath.moveTo(mScanRect.left + HALF_CORNER_BORDER_WIDTH, mScanRect.top + mCornerHeight);
-        mPath.lineTo(mScanRect.left + HALF_CORNER_BORDER_WIDTH, mScanRect.top + HALF_CORNER_BORDER_WIDTH);
-        mPath.lineTo(mScanRect.left + mCornerHeight, mScanRect.top + HALF_CORNER_BORDER_WIDTH);
+        mPath.moveTo(mScanRect.left - HALF_CORNER_BORDER_WIDTH, mScanRect.top + mCornerHeight);
+        mPath.lineTo(mScanRect.left - HALF_CORNER_BORDER_WIDTH, mScanRect.top - HALF_CORNER_BORDER_WIDTH);
+        mPath.lineTo(mScanRect.left + mCornerHeight, mScanRect.top - HALF_CORNER_BORDER_WIDTH);
 
-        mPath.moveTo(mScanRect.right - mCornerHeight, mScanRect.top + HALF_CORNER_BORDER_WIDTH);
-        mPath.lineTo(mScanRect.right - HALF_CORNER_BORDER_WIDTH, mScanRect.top + HALF_CORNER_BORDER_WIDTH);
-        mPath.lineTo(mScanRect.right - HALF_CORNER_BORDER_WIDTH, mScanRect.top + mCornerHeight);
+        mPath.moveTo(mScanRect.right - mCornerHeight, mScanRect.top - HALF_CORNER_BORDER_WIDTH);
+        mPath.lineTo(mScanRect.right + HALF_CORNER_BORDER_WIDTH, mScanRect.top - HALF_CORNER_BORDER_WIDTH);
+        mPath.lineTo(mScanRect.right + HALF_CORNER_BORDER_WIDTH, mScanRect.top + mCornerHeight);
 
-        mPath.moveTo(mScanRect.right - HALF_CORNER_BORDER_WIDTH, mScanRect.bottom - mCornerHeight);
-        mPath.lineTo(mScanRect.right - HALF_CORNER_BORDER_WIDTH, mScanRect.bottom - HALF_CORNER_BORDER_WIDTH);
-        mPath.lineTo(mScanRect.right - mCornerHeight, mScanRect.bottom - HALF_CORNER_BORDER_WIDTH);
+        mPath.moveTo(mScanRect.right + HALF_CORNER_BORDER_WIDTH, mScanRect.bottom - mCornerHeight);
+        mPath.lineTo(mScanRect.right + HALF_CORNER_BORDER_WIDTH, mScanRect.bottom + HALF_CORNER_BORDER_WIDTH);
+        mPath.lineTo(mScanRect.right - mCornerHeight, mScanRect.bottom + HALF_CORNER_BORDER_WIDTH);
 
-        mPath.moveTo(mScanRect.left + mCornerHeight, mScanRect.bottom - HALF_CORNER_BORDER_WIDTH);
-        mPath.lineTo(mScanRect.left + HALF_CORNER_BORDER_WIDTH, mScanRect.bottom - HALF_CORNER_BORDER_WIDTH);
-        mPath.lineTo(mScanRect.left + HALF_CORNER_BORDER_WIDTH, mScanRect.bottom - mCornerHeight);
+        mPath.moveTo(mScanRect.left + mCornerHeight, mScanRect.bottom + HALF_CORNER_BORDER_WIDTH);
+        mPath.lineTo(mScanRect.left - HALF_CORNER_BORDER_WIDTH, mScanRect.bottom + HALF_CORNER_BORDER_WIDTH);
+        mPath.lineTo(mScanRect.left - HALF_CORNER_BORDER_WIDTH, mScanRect.bottom - mCornerHeight);
 
+        mBorderPaint.setColor(mBorderColor);
         mBorderPaint.setStrokeWidth(CORNER_BORDER_WIDTH);
         canvas.drawPath(mPath, mBorderPaint);
     }
 
+    /**
+     * 绘制遮罩
+     * @param canvas 画布
+     */
     private void drawMusk(Canvas canvas) {
         int width = canvas.getWidth();
         int height = canvas.getHeight();
 
-        mPaint.setColor(muskColor);
+        mPaint.setColor(mMuskColor);
         canvas.drawRect(0, 0, width, mScanRect.top, mPaint);
         canvas.drawRect(0, mScanRect.top, mScanRect.left, mScanRect.bottom, mPaint);
         canvas.drawRect(mScanRect.right, mScanRect.top, width, mScanRect.bottom, mPaint);
         canvas.drawRect(0, mScanRect.bottom, width, height, mPaint);
     }
 
+    /**
+     * 添加二维码关键点
+     * @param point 二维码关键点
+     */
     public void addPossibleResultPoint(ResultPoint point) {
         List<ResultPoint> points = possibleResultPoints;
         synchronized (points) {

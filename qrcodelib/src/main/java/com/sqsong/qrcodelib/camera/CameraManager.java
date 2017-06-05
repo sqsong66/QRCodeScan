@@ -27,7 +27,6 @@ import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.sqsong.qrcodelib.camera.open.OpenCamera;
 import com.sqsong.qrcodelib.camera.open.OpenCameraInterface;
-import com.sqsong.qrcodelib.util.DensityUtil;
 
 import java.io.IOException;
 
@@ -244,8 +243,8 @@ public final class CameraManager {
             }
             rect.left = (int) (rect.left * cameraResolution.y * 1.0f / screenResolution.x);
             rect.right = (int) (rect.right * cameraResolution.y * 1.0f / screenResolution.x);
-            rect.top = (int) (rect.top * cameraResolution.x * 1.0f / (screenResolution.y + DensityUtil.getNavigationBarHeight(context)));
-            rect.bottom = (int) (rect.bottom * cameraResolution.x * 1.0f / (screenResolution.y + DensityUtil.getNavigationBarHeight(context)));
+            rect.top = (int) (rect.top * cameraResolution.x * 1.0f / (screenResolution.y));
+            rect.bottom = (int) (rect.bottom * cameraResolution.x * 1.0f / (screenResolution.y));
             framingRectInPreview = rect;
         }
         return framingRectInPreview;

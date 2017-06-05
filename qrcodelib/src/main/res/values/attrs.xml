@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="ScanView">
-        <attr name="centerText" format="string" />
-        <attr name="centerTextSize" format="dimension" />
-        <attr name="centerTextColor" format="color" />
-        <attr name="backgroundColor" format="color" />
-        <attr name="borderColor" format="color" />
+    <declare-styleable name="QRCodeScanView">
+        <attr name="muskColor" format="color" /> <!-- 遮罩颜色 -->
+        <attr name="cornerBorderColor" format="color" /> <!-- 边角边框颜色 -->
+        <attr name="centerLineColor" format="color" /> <!-- 中间扫描颜色 -->
+        <attr name="resultPointColor" format="color" /> <!-- 二维码关键点颜色 -->
+        <attr name="centerLineHeight" format="dimension" /> <!-- 中间扫描线高度 -->
+        <attr name="borderHeight" format="dimension" /> <!-- 边角边框高度颜色 -->
     </declare-styleable>
 
 </resources>

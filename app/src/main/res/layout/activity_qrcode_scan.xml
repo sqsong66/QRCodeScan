@@ -5,7 +5,6 @@
     android:id="@+id/activity_qrcode_scan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.sqsong.qrcodescansample.QRCodeScanActivity">
 
     <SurfaceView
@@ -17,25 +16,17 @@
         android:id="@+id/qrscan_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <!--app:centerLineColor="@android:color/holo_red_dark"-->
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="25dp"
         android:background="@color/colorMusk"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:titleTextColor="@android:color/white">
+        app:theme="@style/ToolbarStyle"
+        app:title="扫一扫"
+        app:titleTextColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="扫一扫"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
-    </android.support.v7.widget.Toolbar>
 </RelativeLayout>
