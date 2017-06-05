@@ -6,4 +6,4 @@ Image Preview:</br>
 
 </br>
 Gif Preview:</br>
-![gif_preview](screenshot/preview_gif.gif)
+![gif_preview](http://odfke6drt.bkt.clouddn.com/scan_gif_preview.gif)
