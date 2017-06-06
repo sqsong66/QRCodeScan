@@ -28,5 +28,4 @@
         app:title="扫一扫"
         app:titleTextColor="@android:color/white" />
 
-
 </RelativeLayout>
