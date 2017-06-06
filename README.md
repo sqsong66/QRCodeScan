@@ -6,4 +6,6 @@ Image Preview:</br>
 
 </br>
 
-![gif_image](screenshot/preview_gif.gif)
+Gif Preview:</br>
+<img src="screenshot/preview_gif.gif" width="270" height="480" />
+<!-- ![gif_preview](screenshot/preview_gif.gif) -->
