@@ -1,5 +1,5 @@
 # QRCode Scanning Library
-A qr code scanning library based on ZXing.
+A qr code scanning library based on ZXing(ZXing core:3.3.0).
 
 ## ScreenShot
 | Image Preview:                                                    | Gif Preview:                                                      |
