@@ -72,6 +72,8 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeDecod
 
     /**
      * Set the {@link CameraManager} for the {@link QRCodeScanView}.
+     * Must be set, because the {@link QRCodeScanView}'s preview frame depend on the
+     * {@link CameraManager}'s params.
      * @param cameraManager
      */
     @Override
@@ -81,6 +83,11 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeDecod
         }
     }
 
+    /**
+     * The ZXing library find the possible qrcode point, and {@link QRCodeScanView}
+     * draw the point to the preview frame.
+     * @param point possible point.
+     */
     @Override
     public void foundPossibleResultPoint(ResultPoint point) {
         if (mQRCodeScanView != null) {
@@ -88,6 +95,10 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeDecod
         }
     }
 
+    /**
+     * Resolve the qrcode success, and return the result.
+     * @param result qrcode result.
+     */
     @Override
     public void onDecodeSuccess(Result result) {
         Intent intent = new Intent();

@@ -71,28 +71,57 @@ protected void onPause() {
 5. Implete the interface `QRCodeDecodeCallback` method:
 ```java
 /**
-* Set the {@link CameraManager} for the {@link QRCodeScanView}.
-* @param cameraManager
-*/
+ * Set the {@link CameraManager} for the {@link QRCodeScanView}.
+ * Must be set, because the {@link QRCodeScanView}'s preview frame depend on the
+ * {@link CameraManager}'s params.
+ * @param cameraManager
+ */
 @Override
 public void cameraManagerInitFinish(CameraManager cameraManager) {
-  if (mQRCodeScanView != null && cameraManager != null) {
-      mQRCodeScanView.setCameraManager(cameraManager);
-  }
+    if (mQRCodeScanView != null && cameraManager != null) {
+        mQRCodeScanView.setCameraManager(cameraManager);
+    }
 }
 
+/**
+ * The ZXing library find the possible qrcode point, and {@link QRCodeScanView}
+ * draw the point to the preview frame.
+ * @param point possible point.
+ */
 @Override
 public void foundPossibleResultPoint(ResultPoint point) {
-  if (mQRCodeScanView != null) {
-      mQRCodeScanView.addPossibleResultPoint(point);
-  }
+    if (mQRCodeScanView != null) {
+        mQRCodeScanView.addPossibleResultPoint(point);
+    }
 }
 
+/**
+ * Resolve the qrcode success, and return the result.
+ * @param result qrcode result.
+ */
 @Override
 public void onDecodeSuccess(Result result) {
-  Intent intent = new Intent();
-  intent.putExtra("scan_result", result.getText());
-  setResult(RESULT_OK, intent);
-  finish();
+    Intent intent = new Intent();
+    intent.putExtra("scan_result", result.getText());
+    setResult(RESULT_OK, intent);
+    finish();
 }
+```
+That's All.
+
+If you have any question, you can make a issue or contact me.
+
+## License
+```
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```
