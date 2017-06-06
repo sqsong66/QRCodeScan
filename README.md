@@ -17,12 +17,16 @@ repositories {
     ...
 }
 ```
+
 </br>
+
 2. Add the follow dependency to your project build.gradle file:
 ```
 compile 'com.github.songmao123:qrscanlib:1.0.0'
 ```
+
 </br>
+
 3. Add `SurfaceView` and `QRCodeScanView`to your Activity's root layout:
 ```xml
 ...
@@ -35,9 +39,11 @@ compile 'com.github.songmao123:qrscanlib:1.0.0'
     android:id="@+id/qrscan_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
-```
 ...
+```
+
 </br>
+
 4. On the activity `OnCreate` method, init the `SurfaceHolder` and `QRCodeManager`.
 ```java
 mSurfaceHolder = mSurfaceView.getHolder();
@@ -59,7 +65,9 @@ protected void onPause() {
     super.onPause();
 }
 ```
+
 </br>
+
 5. Implete the interface `QRCodeDecodeCallback` method:
 ```java
 /**
