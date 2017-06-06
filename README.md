@@ -5,5 +5,5 @@ Image Preview:</br>
 ![static_preview](screenshot/preview.png)
 
 </br>
-Gif Preview:</br>
-![gif01](http://odfke6drt.bkt.clouddn.com/scan_gif_preview.gif)
+
+![gif_image](screenshot/preview_gif.gif)
