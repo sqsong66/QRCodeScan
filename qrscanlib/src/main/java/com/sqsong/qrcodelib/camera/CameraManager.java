@@ -41,21 +41,22 @@ public final class CameraManager {
 
     private static final String TAG = CameraManager.class.getSimpleName();
 
-    private final Context context;
-    private final CameraConfigurationManager configManager;
-    private OpenCamera camera;
-    private AutoFocusManager autoFocusManager;
     private Rect framingRect;
-    private Rect framingRectInPreview;
-    private boolean initialized;
+    private OpenCamera camera;
     private boolean previewing;
+    private boolean initialized;
+    private final Context context;
+    private Rect framingRectInPreview;
+    private AutoFocusManager autoFocusManager;
+    private final PreviewCallback previewCallback;
+    private final CameraConfigurationManager configManager;
     private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
+
     /**
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
      * clear the handler so it will only receive one message.
+     * @param context
      */
-    private final PreviewCallback previewCallback;
-
     public CameraManager(Context context) {
         this.context = context;
         this.configManager = new CameraConfigurationManager(context);

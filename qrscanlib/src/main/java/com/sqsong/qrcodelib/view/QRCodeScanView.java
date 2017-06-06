@@ -6,8 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -54,11 +52,11 @@ public class QRCodeScanView extends View {
         this(context, null);
     }
 
-    public QRCodeScanView(Context context, @Nullable AttributeSet attrs) {
+    public QRCodeScanView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public QRCodeScanView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public QRCodeScanView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         initParams(context, attrs);
@@ -67,10 +65,10 @@ public class QRCodeScanView extends View {
 
     private void initParams(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.QRCodeScanView);
-        mMuskColor = ta.getColor(R.styleable.QRCodeScanView_muskColor, ContextCompat.getColor(getContext(), R.color.colorMusk));
-        mBorderColor = ta.getColor(R.styleable.QRCodeScanView_cornerBorderColor, ContextCompat.getColor(getContext(), R.color.colorAccent));
-        mCenterLineColor = ta.getColor(R.styleable.QRCodeScanView_centerLineColor, ContextCompat.getColor(getContext(), R.color.colorAccent));
-        mResultPointColor = ta.getColor(R.styleable.QRCodeScanView_resultPointColor, ContextCompat.getColor(getContext(), R.color.colorPossiblePoints));
+        mMuskColor = ta.getColor(R.styleable.QRCodeScanView_muskColor, getResources().getColor(R.color.colorMusk));
+        mBorderColor = ta.getColor(R.styleable.QRCodeScanView_cornerBorderColor, getResources().getColor(R.color.colorAccent));
+        mCenterLineColor = ta.getColor(R.styleable.QRCodeScanView_centerLineColor, getResources().getColor(R.color.colorAccent));
+        mResultPointColor = ta.getColor(R.styleable.QRCodeScanView_resultPointColor, getResources().getColor(R.color.colorPossiblePoints));
         mCornerHeight = (int) ta.getDimension(R.styleable.QRCodeScanView_borderHeight, 0);
         mCenterLineHeight = (int) ta.getDimension(R.styleable.QRCodeScanView_centerLineHeight, DensityUtil.dip2px(1));
         ta.recycle();
@@ -117,8 +115,8 @@ public class QRCodeScanView extends View {
     }
 
     /**
-     * 绘制可能是二维码关键点的店
-     * @param canvas 画布
+     * draw the possible qrcode points.
+     * @param canvas
      */
     private void drawPossiblePoints(Canvas canvas) {
         float scaleX = mScanRect.width() / (float) mPreviewScanRect.width();
@@ -161,8 +159,8 @@ public class QRCodeScanView extends View {
     }
 
     /**
-     * 绘制中间的扫描线
-     * @param canvas 画布
+     * draw the center scanning line.
+     * @param canvas
      */
     private void drawCenterLine(Canvas canvas) {
         mCenterLineTop += CENTER_LINE_MOVE_DISTANCE;
@@ -176,8 +174,8 @@ public class QRCodeScanView extends View {
     }
 
     /**
-     * 绘制四个边角部分
-     * @param canvas 画布
+     * draw the four corner border.
+     * @param canvas
      */
     private void drawFourCorner(Canvas canvas) {
         mPath.reset();
@@ -204,8 +202,8 @@ public class QRCodeScanView extends View {
     }
 
     /**
-     * 绘制遮罩
-     * @param canvas 画布
+     * draw the musk.
+     * @param canvas
      */
     private void drawMusk(Canvas canvas) {
         int width = canvas.getWidth();
@@ -219,8 +217,8 @@ public class QRCodeScanView extends View {
     }
 
     /**
-     * 添加二维码关键点
-     * @param point 二维码关键点
+     * add the possible qrcode point.
+     * @param point qrcode point.
      */
     public void addPossibleResultPoint(ResultPoint point) {
         List<ResultPoint> points = possibleResultPoints;
