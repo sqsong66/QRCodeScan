@@ -70,6 +70,10 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeDecod
         super.onPause();
     }
 
+    /**
+     * Set the {@link CameraManager} for the {@link QRCodeScanView}.
+     * @param cameraManager
+     */
     @Override
     public void cameraManagerInitFinish(CameraManager cameraManager) {
         if (mQRCodeScanView != null && cameraManager != null) {
