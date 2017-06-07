@@ -7,27 +7,14 @@ A qr code scanning library based on ZXing(ZXing core:3.3.0).
 | <img src="screenshot/preview.png" width="270" height="480" />     | <img src="screenshot/preview_gif.gif" width="270" height="480" /> |
 
 ## How to use?
-1. To the root build.gradle file add:
-```
-repositories {
-    ...
-    maven {
-        url 'https://dl.bintray.com/sqsong/maven'
-    }
-    ...
-}
-```
-
-</br>
-
-2. Add the follow dependency to your project build.gradle file:
+1. Add the follow dependency to your project build.gradle file:
 ```
 compile 'com.github.songmao123:qrscanlib:1.0.0'
 ```
 
 </br>
 
-3. Add `SurfaceView` and `QRCodeScanView`to your Activity's root layout:
+2. Add `SurfaceView` and `QRCodeScanView`to your Activity's root layout:
 ```xml
 ...
 <SurfaceView
@@ -41,10 +28,21 @@ compile 'com.github.songmao123:qrscanlib:1.0.0'
     android:layout_height="match_parent" />
 ...
 ```
+The `QRCodeScanView` has some customeize attributes you can use it:
+```xml
+<declare-styleable name="QRCodeScanView">
+    <attr name="muskColor" format="color" /> <!-- 遮罩颜色 -->
+    <attr name="cornerBorderColor" format="color" /> <!-- 边角边框颜色 -->
+    <attr name="centerLineColor" format="color" /> <!-- 中间扫描颜色 -->
+    <attr name="resultPointColor" format="color" /> <!-- 二维码关键点颜色 -->
+    <attr name="centerLineHeight" format="dimension" /> <!-- 中间扫描线高度 -->
+    <attr name="borderHeight" format="dimension" /> <!-- 边角边框高度颜色 -->
+</declare-styleable>
+```
 
 </br>
 
-4. On the activity `OnCreate` method, init the `SurfaceHolder` and `QRCodeManager`.
+3. On the activity `OnCreate` method, init the `SurfaceHolder` and `QRCodeManager`.
 ```java
 mSurfaceHolder = mSurfaceView.getHolder();
 mQRCodeManager = new QRCodeManager(getApplicationContext(), this);
@@ -68,7 +66,7 @@ protected void onPause() {
 
 </br>
 
-5. Implete the interface `QRCodeDecodeCallback` method:
+4. Implete the interface `QRCodeDecodeCallback` method:
 ```java
 /**
  * Set the {@link CameraManager} for the {@link QRCodeScanView}.
